@@ -24,6 +24,8 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.CharStreams;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.ImplFirebaseTrampolines;
 import com.google.firebase.internal.NonNull;
 import com.google.firebase.tasks.Continuation;
 import com.google.firebase.tasks.Task;
@@ -58,7 +60,11 @@ public class FirebaseCredentials {
           "https://www.googleapis.com/auth/identitytoolkit",
 
           // Enables access to Google Cloud Storage.
-          "https://www.googleapis.com/auth/devstorage.full_control");
+          "https://www.googleapis.com/auth/devstorage.full_control",
+
+          "https://www.googleapis.com/auth/cloud-platform",
+
+          "https://www.googleapis.com/auth/datastore");
 
   private FirebaseCredentials() {
   }
@@ -66,6 +72,16 @@ public class FirebaseCredentials {
   private static String streamToString(InputStream inputStream) throws IOException {
     InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
     return CharStreams.toString(reader);
+  }
+
+  // Temp solution to get project ID from App.
+  // Need to rethink how to get this information properly.
+  public static String getProjectId(FirebaseApp app) {
+    FirebaseCredential credential = ImplFirebaseTrampolines.getCredential(app);
+    if (credential instanceof CertCredential) {
+      return ((CertCredential) credential).projectId;
+    }
+    return System.getenv("GCLOUD_PROJECT");
   }
 
   /**

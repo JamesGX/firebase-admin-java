@@ -27,6 +27,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.BaseEncoding;
+import com.google.firebase.auth.FirebaseCredential;
 import com.google.firebase.auth.GoogleOAuthAccessToken;
 import com.google.firebase.internal.AuthStateListener;
 import com.google.firebase.internal.FirebaseAppStore;
